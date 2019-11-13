@@ -9,7 +9,8 @@ const gulp = require("gulp"),
   jpeg      = require("imagemin-jpeg-recompress"),
   rename = require("gulp-rename"),
   livereload = require("gulp-livereload"),
-  sourcemap = require("gulp-sourcemaps");
+  sourcemap = require("gulp-sourcemaps"),
+  pug     = require("gulp-pug");
 
 // Source object
 const source = {
@@ -17,14 +18,15 @@ const source = {
   sassWatch: "source/scss/**/*.scss",
   js: "source/js/*.js",
   jsWatch: "source/js/**/*.js",
-  images: "source/images/**/*.*"
+  images: "source/images/**/*.*",
+  pug: "source/pug/*.pug"
 };
 // Dist object
 const dist = {
   css: "dist/css",
   js: "dist/js",
   images: "dist/images",
-  htmlWatch: "dist/**/*.html"
+  html: "dist"
 };
 
 // ==================== Tasks ====================
@@ -34,7 +36,9 @@ const dist = {
  * + Just using livereload
  */
 gulp.task("html", function(){
-    return  gulp.src(dist.htmlWatch)
+    return  gulp.src(source.pug)
+                .pipe(pug({pretty: true}))  // For prettey output
+                .pipe(gulp.dest(dist.html))
                 .pipe(livereload())
 })
 
@@ -138,7 +142,7 @@ gulp.task("watch", function(){
     // SCSS
     gulp.watch(source.sassWatch, gulp.series(...["css"]));
     gulp.watch(source.jsWatch, gulp.series(...["js.babel"]));
-    gulp.watch(dist.htmlWatch, gulp.series(...["html"]));
+    gulp.watch(source.pug, gulp.series(...["html"]));
     require("./Server.js");
     livereload.listen();
 })
