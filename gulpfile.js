@@ -142,7 +142,7 @@ gulp.task("watch", function(){
     // SCSS
     gulp.watch(source.sassWatch, gulp.series(...["css"]));
     gulp.watch(source.jsWatch, gulp.series(...["js.babel"]));
-    gulp.watch(source.pug, gulp.series(...["html"]));
+    gulp.watch("source/pug/**/*.pug", gulp.series(...["html"]));
     require("./Server.js");
     livereload.listen();
 })
